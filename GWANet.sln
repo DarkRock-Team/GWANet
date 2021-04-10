@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet", "GWANet.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet", "GWANet.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,8 +11,8 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Debug|Any CPU.Build.0 = Debug|x64
 		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection

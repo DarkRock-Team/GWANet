@@ -307,3 +307,6 @@ paket-files/
 
 # FAKE - F# Make
 .fake/
+
+# Rider
+.idea/
