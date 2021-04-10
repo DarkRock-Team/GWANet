@@ -9,7 +9,7 @@ using GWANet.Native.Enums;
 
 namespace GWANet
 {
-    public class GwaMain : IDisposable
+    public class GWANet : IGWANet
     {
         private const string ProcessName = "Guild Wars";
 

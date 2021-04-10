@@ -4,6 +4,6 @@ namespace GWANet.Exceptions
 {
     public abstract class GWANetException : Exception
     {
-        public GWANetException(string exceptionMessage) : base(exceptionMessage) { }
+        protected GWANetException(string exceptionMessage) : base(exceptionMessage) { }
     }
 }
