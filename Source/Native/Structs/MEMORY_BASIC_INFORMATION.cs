@@ -9,7 +9,7 @@ namespace GWANet.Native.Structs
         public IntPtr BaseAddress;
         public IntPtr AllocationBase;
         public uint AllocationProtect;
-        public IntPtr RegionSize;
+        public uint RegionSize;
         public uint State;
         public uint Protect;
         public uint Type;
