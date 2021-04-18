@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace GWANet.Source
+namespace GWANet
 {
     internal class MemScanner
     {
