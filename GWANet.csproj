@@ -8,8 +8,14 @@
 
   <ItemGroup>
     <Compile Remove="Examples\**" />
+    <Compile Remove="GWANet.UnitTests\**" />
     <EmbeddedResource Remove="Examples\**" />
+    <EmbeddedResource Remove="GWANet.UnitTests\**" />
     <None Remove="Examples\**" />
+    <None Remove="GWANet.UnitTests\**" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>$(MSBuildProjectName).UnitTests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>
