@@ -8,44 +8,41 @@ using System.Runtime.InteropServices;
 
 namespace GWANet
 {
-    internal class MemScanner
+    internal class MemScanner : IDisposable
     {
-        public bool IsInitialized { get; private set; }
-        public Process GameProcess { get; private set; }
+        private Process _gameProcess;
 
-        protected List<MEMORY_BASIC_INFORMATION> MemoryRegion { get; set; }
+        private List<MEMORY_BASIC_INFORMATION> MemoryRegion { get; set; }
 
-        public void Initialize(Process gameProcess)
+        public MemScanner(Process gameProcess)
         {
-            if(IsInitialized && gameProcess.Id == GameProcess?.Id)
+            if(gameProcess.Id == _gameProcess?.Id)
             {
                 throw new ScannerIsAlreadyInitializedException(gameProcess?.Id.ToString());
             }  
-            GameProcess = gameProcess;
-            InitializeMemoryRegions(GameProcess.Handle);
-
-            IsInitialized = true;
+            _gameProcess = gameProcess;
+            InitializeMemoryRegions(_gameProcess.Handle);
         }
 
-        protected void InitializeMemoryRegions(IntPtr pHandle)
+        private void InitializeMemoryRegions(IntPtr pHandle)
         {
             MemoryRegion = new List<MEMORY_BASIC_INFORMATION>();
             var regionAddress = new IntPtr();
             while (true)
             {
-                var MemInfo = new MEMORY_BASIC_INFORMATION();
-                int MemDump = Native.Imports.VirtualQueryEx(pHandle, regionAddress, out MemInfo, (uint)Marshal.SizeOf(MemInfo));
+                var memInfo = new MEMORY_BASIC_INFORMATION();
+                int memDump = Native.Imports.VirtualQueryEx(pHandle, regionAddress, out memInfo, (uint)Marshal.SizeOf(memInfo));
                 // Check if VirtualQueryEx failed (returns 0)
-                if (MemDump == 0)
+                if (memDump == 0)
                 {
                     break;
                 }
                 // TODO: change to CONSTS or ENUMs
-                if ((MemInfo.State & 0x1000) != 0 && (MemInfo.Protect & 0x100) == 0)
+                if ((memInfo.State & 0x1000) != 0 && (memInfo.Protect & 0x100) == 0)
                 {
-                    MemoryRegion.Add(MemInfo);
+                    MemoryRegion.Add(memInfo);
                 }
-                regionAddress = new IntPtr(MemInfo.BaseAddress.ToInt32() + (int)MemInfo.RegionSize);
+                regionAddress = new IntPtr(memInfo.BaseAddress.ToInt32() + (int)memInfo.RegionSize);
             }
         }
         protected IntPtr Scan(byte[] sIn, byte[] sFor)
@@ -66,14 +63,10 @@ namespace GWANet
         }
         public IntPtr AobScan(BytePattern bytePattern)
         {
-            if (IsInitialized is false)
-            {
-                throw new ScannerIsNotInitializedException();
-            }
             for (int i = 0; i < MemoryRegion.Count; i++)
             {
                 byte[] buff = new byte[MemoryRegion[i].RegionSize];
-                Native.Imports.ReadProcessMemory(GameProcess.Handle, MemoryRegion[i].BaseAddress, buff, (int)MemoryRegion[i].RegionSize, out _);
+                Native.Imports.ReadProcessMemory(_gameProcess.Handle, MemoryRegion[i].BaseAddress, buff, (int)MemoryRegion[i].RegionSize, out _);
 
                 IntPtr Result = Scan(buff, bytePattern.Pattern);
                 if (Result != IntPtr.Zero)
@@ -83,12 +76,24 @@ namespace GWANet
             }
             return IntPtr.Zero;
         }
+
+        public IntPtr AssertionScan(string assertionFileName, string assertionMsg, string hexOffset)
+        {
+            if (!string.IsNullOrEmpty(assertionFileName))
+            {
+                
+            }
+        }
         // After that, the class can be re-used
         public void PrepareForReuse()
         {
             MemoryRegion = null;
-            GameProcess = null;
-            IsInitialized = false;
+            _gameProcess = null;
+        }
+
+        public void Dispose()
+        {
+            _gameProcess?.Dispose();
         }
     }
 }
