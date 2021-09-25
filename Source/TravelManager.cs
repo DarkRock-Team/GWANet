@@ -2,7 +2,7 @@
 
 namespace GWANet
 {
-    public class TravelManager
+    internal class TravelManager
     {
         public void TravelGh()
         {
