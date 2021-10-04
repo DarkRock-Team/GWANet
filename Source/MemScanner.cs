@@ -9,14 +9,14 @@ using GWANet.Native;
 
 namespace GWANet
 {
-    internal class MemScanner : IDisposable
+    internal class MemScanner : IMemScanner
     {
         private readonly Process _gameProcess;
         
         private byte[] _moduleByteBuffer;
         private ulong _moduleBaseAddress;
         private int _moduleMemorySize;
-        private Dictionary<string, BytePattern> bytePatterns { get; }
+        private Dictionary<ulong, BytePattern> bytePatterns { get; }
 
         public MemScanner(Process gameProcess, ProcessModule targetModule = null)
         {
@@ -46,10 +46,10 @@ namespace GWANet
         /// <summary>
         /// Used to add a pattern for parallel scanning
         /// </summary>
-        /// <param name="patternName"> pattern name</param>
+        /// <param name="returnAddress"> variable to store a returned address</param>
         /// <param name="pattern"> byte pattern to add</param>
-        public void AddPattern(string patternName, BytePattern pattern)
-            => bytePatterns.Add(patternName, pattern);
+        public void AddPattern(ulong returnAddress, BytePattern pattern)
+            => bytePatterns.Add(returnAddress, pattern);
 
         private bool PatternCheck(int nOffset, IEnumerable<byte> arrPattern)
         {
@@ -84,9 +84,9 @@ namespace GWANet
             return 0;
         }
 
-        public IntPtr AssertionScan(string assertionFileName, string assertionMsg, string hexOffset)
+        public ulong AssertionScan(string assertionFileName, string assertionMsg, long hexOffset)
         {
-            return IntPtr.Zero;
+            throw new NotImplementedException();
             if (!string.IsNullOrEmpty(assertionFileName))
             {
                 

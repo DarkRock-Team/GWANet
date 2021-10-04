@@ -47,9 +47,16 @@ namespace GWANet
             if (basePtr != 0)
             {
                 var preGameContextAddress =
-                    _memScanner.AssertionScan("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", "+0x34");
+                    _memScanner.AssertionScan("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", 0x34);
+                
+                
             }
             return string.Empty;
+        }
+
+        private void InitializeManagers()
+        {
+            
         }
 
         public void Dispose()
