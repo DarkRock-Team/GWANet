@@ -8,13 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Examples\**" />
-    <Compile Remove="GWANet.UnitTests\**" />
+    <Compile Remove="GWANet.IntegrationTests\**" />
     <EmbeddedResource Remove="Examples\**" />
-    <EmbeddedResource Remove="GWANet.UnitTests\**" />
+    <EmbeddedResource Remove="GWANet.IntegrationTests\**" />
     <None Remove="Examples\**" />
-    <None Remove="GWANet.UnitTests\**" />
+    <None Remove="GWANet.IntegrationTests\**" />
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
-      <_Parameter1>$(MSBuildProjectName).UnitTests</_Parameter1>
+      <_Parameter1>$(MSBuildProjectName).IntegrationTests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 

@@ -4,9 +4,9 @@ namespace GWANet.Domain
     {
         public byte[] Pattern { get; }
         public string Mask { get; }
-        public string HexOffset { get; }
+        public long HexOffset { get; }
 
-        public BytePattern(byte[] pattern, string offset, string mask = "")
+        public BytePattern(byte[] pattern, long offset, string mask = "")
         {
             Pattern = pattern;
             HexOffset = offset;

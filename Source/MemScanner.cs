@@ -1,94 +1,96 @@
 ﻿using GWANet.Domain;
 using GWANet.Native.Structs;
-using GWANet.Source.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Linq;
+using GWANet.Exceptions.MemScanner;
+using GWANet.Native;
 
 namespace GWANet
 {
     internal class MemScanner : IDisposable
     {
-        private Process _gameProcess;
+        private readonly Process _gameProcess;
+        
+        private byte[] _moduleByteBuffer;
+        private ulong _moduleBaseAddress;
+        private int _moduleMemorySize;
+        private Dictionary<string, BytePattern> bytePatterns { get; }
 
-        private List<MEMORY_BASIC_INFORMATION> MemoryRegion { get; set; }
-
-        public MemScanner(Process gameProcess)
+        public MemScanner(Process gameProcess, ProcessModule targetModule = null)
         {
-            if(gameProcess.Id == _gameProcess?.Id)
+            if (gameProcess.Handle == IntPtr.Zero)
             {
-                throw new ScannerIsAlreadyInitializedException(gameProcess?.Id.ToString());
-            }  
+                throw new InvalidProcessHandleException(gameProcess.Handle.ToString());
+            }
             _gameProcess = gameProcess;
-            InitializeMemoryRegions(_gameProcess.Handle);
+
+            AssignModuleData(targetModule ?? gameProcess.MainModule);
+
+            Imports.ReadProcessMemory(_gameProcess.Handle, _moduleBaseAddress, _moduleByteBuffer, _moduleMemorySize);
         }
 
-        private void InitializeMemoryRegions(IntPtr pHandle)
+        private void AssignModuleData(ProcessModule module)
         {
-            MemoryRegion = new List<MEMORY_BASIC_INFORMATION>();
-            var regionAddress = new IntPtr();
-            while (true)
+            if (module is null)
             {
-                var memInfo = new MEMORY_BASIC_INFORMATION();
-                int memDump = Native.Imports.VirtualQueryEx(pHandle, regionAddress, out memInfo, (uint)Marshal.SizeOf(memInfo));
-                // Check if VirtualQueryEx failed (returns 0)
-                if (memDump == 0)
-                {
-                    break;
-                }
-                // TODO: change to CONSTS or ENUMs
-                if ((memInfo.State & 0x1000) != 0 && (memInfo.Protect & 0x100) == 0)
-                {
-                    MemoryRegion.Add(memInfo);
-                }
-                regionAddress = new IntPtr(memInfo.BaseAddress.ToInt32() + (int)memInfo.RegionSize);
+                throw new InvalidProcessModuleException(_gameProcess.Id);
             }
+            _moduleBaseAddress = (ulong)module.BaseAddress;
+            _moduleByteBuffer = new byte[module.ModuleMemorySize];
+            _moduleMemorySize = module.ModuleMemorySize;
         }
-        protected IntPtr Scan(byte[] sIn, byte[] sFor)
-        {
-            int[] sBytes = new int[256]; int Pool = 0;
-            int End = sFor.Length - 1;
-            for (int i = 0; i < 256; i++)
-                sBytes[i] = sFor.Length;
-            for (int i = 0; i < End; i++)
-                sBytes[sFor[i]] = End - i;
-            while (Pool <= sIn.Length - sFor.Length)
-            {
-                for (int i = End; sIn[Pool + i] == sFor[i]; i--)
-                    if (i == 0) return new IntPtr(Pool);
-                Pool += sBytes[sIn[Pool + End]];
-            }
-            return IntPtr.Zero;
-        }
-        public IntPtr AobScan(BytePattern bytePattern)
-        {
-            for (int i = 0; i < MemoryRegion.Count; i++)
-            {
-                byte[] buff = new byte[MemoryRegion[i].RegionSize];
-                Native.Imports.ReadProcessMemory(_gameProcess.Handle, MemoryRegion[i].BaseAddress, buff, (int)MemoryRegion[i].RegionSize, out _);
+        
+        
+        /// <summary>
+        /// Used to add a pattern for parallel scanning
+        /// </summary>
+        /// <param name="patternName"> pattern name</param>
+        /// <param name="pattern"> byte pattern to add</param>
+        public void AddPattern(string patternName, BytePattern pattern)
+            => bytePatterns.Add(patternName, pattern);
 
-                IntPtr Result = Scan(buff, bytePattern.Pattern);
-                if (Result != IntPtr.Zero)
+        private bool PatternCheck(int nOffset, IEnumerable<byte> arrPattern)
+        {
+            return !arrPattern
+                        .Where((patternByte, patternIndex) => patternByte != 0x0 && patternByte != _moduleByteBuffer[nOffset + patternIndex])
+                        .Any();
+        }
+        
+        public ulong AobScan(BytePattern bytePattern)
+        {
+            for (var moduleIndex = 0; moduleIndex < _moduleByteBuffer.Length; moduleIndex++)
+            {
+                // Check the beginning bytes of the module
+                if (_moduleByteBuffer[moduleIndex] != bytePattern.Pattern[0])
                 {
-                    return new IntPtr(MemoryRegion[i].BaseAddress.ToInt32() + Result.ToInt32());
+                    continue;
+                }
+                    
+
+                if (PatternCheck(moduleIndex, bytePattern.Pattern))
+                {
+                    if (bytePattern.HexOffset < 0)
+                    {
+                        return (_moduleBaseAddress + (ulong)moduleIndex) - (ulong)bytePattern.HexOffset;
+                    }
+                    else
+                    {
+                        return (_moduleBaseAddress + (ulong)moduleIndex) + (ulong)bytePattern.HexOffset;
+                    }
                 }
             }
-            return IntPtr.Zero;
+            return 0;
         }
 
         public IntPtr AssertionScan(string assertionFileName, string assertionMsg, string hexOffset)
         {
+            return IntPtr.Zero;
             if (!string.IsNullOrEmpty(assertionFileName))
             {
                 
             }
-        }
-        // After that, the class can be re-used
-        public void PrepareForReuse()
-        {
-            MemoryRegion = null;
-            _gameProcess = null;
         }
 
         public void Dispose()

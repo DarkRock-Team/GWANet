@@ -1,7 +1,6 @@
-﻿using GWANet.Exceptions;
-using System;
+﻿using System;
 
-namespace GWANet.Source.Exceptions
+namespace GWANet.Exceptions.MemScanner
 {
     [Serializable]
     public sealed class ScannerIsAlreadyInitializedException : GWANetException

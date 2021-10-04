@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GWANet.Exceptions;
 using GWANet.Native.Enums;
-using GWANet.Source;
 using GWANet.Domain;
 
 namespace GWANet
@@ -44,17 +41,10 @@ namespace GWANet
         }
         private string ScanForCharacterName(in Process gameProcess)
         {
-            if (_memScanner is null)
-            {
-                _memScanner = new MemScanner(gameProcess);
-            }
-            else
-            {
-                _memScanner.PrepareForReuse();
-            }
-            
+            _memScanner ??= new MemScanner(gameProcess);
+
             var basePtr = _memScanner.AobScan(AobPatterns.ScanBasePtr);
-            if (basePtr != IntPtr.Zero)
+            if (basePtr != 0)
             {
                 var preGameContextAddress =
                     _memScanner.AssertionScan("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", "+0x34");
