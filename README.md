@@ -1,10 +1,9 @@
+![.NET 5](https://github.com/DarkRock-Team/GWANet/workflows/.NET/badge.svg?branch=master)
 # <center> GWANet </center>
-.NET API interface to Guild Wars game client. Public methods names are 1:1 as in the GWA2 project for easier & faster porting.
-Additional methods are documented regularly on the wiki subpage.
+.NET API interface to Guild Wars game client.
 
-Credits to all GWA2 contributors for reversal information (Miracle444, TheArkanaProject and others).
+Credits to all GWA2 and GWCA contributors for reversal information.
 
 ## Usage
 Include the following project into your solution, then simply call Initialize
-You can browse the TitleHelper example included in the solution.
-More info about public methods will be published soon to the Wiki page of this repository.
+You can browse the TitleHelper example included in the solution for getting a hang of the workflow.
