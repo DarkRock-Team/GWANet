@@ -1,6 +1,6 @@
 namespace GWANet.Domain
 {
-    internal class BytePattern
+    public class BytePattern
     {
         public byte[] Pattern { get; }
         public string Mask { get; }

@@ -9,7 +9,7 @@ using GWANet.Native;
 
 namespace GWANet
 {
-    internal class MemScanner : IMemScanner
+    public class MemScanner : IMemScanner
     {
         private readonly Process _gameProcess;
         

@@ -4,7 +4,7 @@ using System.Text;
 namespace GWANet.Domain
 {
     // TODO: Think about moving related patterns to the suitable managers in the future
-    internal static class AobPatterns
+    public static class AobPatterns
     {
         public static readonly BytePattern ScanBasePtr = 
             new BytePattern(new byte[] { 0x50 ,0x6A, 0x0F, 0x6A, 0x00, 0xFF, 0x35 }, 0x7);
