@@ -46,9 +46,6 @@ namespace GWANet
             var basePtr = _memScanner.AobScan(AobPatterns.ScanBasePtr);
             if (basePtr != 0)
             {
-                var preGameContextAddress =
-                    _memScanner.AssertionScan("p:\\code\\gw\\ui\\uipregame.cpp", "!s_scene", 0x34);
-                
                 
             }
             return string.Empty;

@@ -5,6 +5,10 @@
     <AssemblyName>GWANet</AssemblyName>
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>10</LangVersion>
+    <PackageIcon>gwanet.ico</PackageIcon>
+    <RepositoryUrl>https://github.com/DarkRock-Team/GWANet</RepositoryUrl>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +21,11 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
       <_Parameter1>$(MSBuildProjectName).IntegrationTests</_Parameter1>
     </AssemblyAttribute>
+    <None Include="..\Resources\gwanet.ico">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+      <Link>gwanet.ico</Link>
+    </None>
   </ItemGroup>
 
 </Project>
