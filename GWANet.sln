@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet", "Source\GWANet.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet", "Source\Main\GWANet.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.SystemTests", "Tests\GWANet.SystemTests\GWANet.SystemTests.csproj", "{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}"
 EndProject
