@@ -1,5 +1,9 @@
-![alt text](https://github.com/DarkRock-Team/GWANet/blob/master/Resources/gwanet.png "GWANet")
+ <p align="center">
+    <img src="Resources/gwanet.png" alt="">
+ </p>
+ 
 ![.NET 6](https://github.com/DarkRock-Team/GWANet/workflows/.NET/badge.svg?branch=master)
+[![Maintainability](https://api.codeclimate.com/v1/badges/c251f906a99cdd1bfedc/maintainability)](https://codeclimate.com/github/DarkRock-Team/GWANet/maintainability)
 # <center> GWANet </center>
 .NET API interface to Guild Wars game client.
 
