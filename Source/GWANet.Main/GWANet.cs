@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using GWANet.Exceptions;
 using GWANet.Native.Enums;
 using GWANet.Domain;
+using GWANet.Main.Exceptions;
 
 namespace GWANet
 {

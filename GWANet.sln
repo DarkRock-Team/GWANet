@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet", "Source\Main\GWANet.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Main", "Source\GWANet.Main\GWANet.Main.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.MemScanner", "Source\GWANet.MemScanner\GWANet.MemScanner.csproj", "{06B5F9B2-C2AB-4877-B5E0-1AA400072838}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.SystemTests", "Tests\GWANet.SystemTests\GWANet.SystemTests.csproj", "{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}"
 EndProject
@@ -31,6 +33,14 @@ Global
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|x64.ActiveCfg = Release|x64
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|x64.Build.0 = Release|x64
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.Build.0 = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.ActiveCfg = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

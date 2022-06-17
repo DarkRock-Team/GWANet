@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace GWANet.Native.Enums
+﻿namespace GWANet.MemScanner.Native.Enums
 {
     /// <summary>
     /// Defines process security and access rights.

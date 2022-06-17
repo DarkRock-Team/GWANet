@@ -1,4 +1,4 @@
-﻿namespace GWANet.Native.Enums
+﻿namespace GWANet.MemScanner.Native.Enums
 {
     public enum AllocationProtect : uint
     {

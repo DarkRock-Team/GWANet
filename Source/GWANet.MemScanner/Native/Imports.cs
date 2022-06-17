@@ -1,10 +1,9 @@
-﻿using GWANet.Native.Enums;
-using GWANet.Native.Structs;
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
+using GWANet.MemScanner.Native.Enums;
+using GWANet.MemScanner.Native.Structs;
 
-namespace GWANet.Native
+namespace GWANet.MemScanner.Native
 {
     internal class Imports
     {

@@ -1,4 +1,4 @@
-namespace GWANet.Domain
+namespace GWANet.MemScanner.Definitions
 {
     public class BytePattern
     {

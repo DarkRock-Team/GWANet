@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace GWANet.Exceptions
+namespace GWANet.Main.Exceptions
 {
     [Serializable]
-    public sealed class GameProcessNotFoundException : GWANetException
+    public sealed class GameProcessNotFoundException : InvalidOperationException
     {
         public GameProcessNotFoundException() : base("No running game processes were found")
         {

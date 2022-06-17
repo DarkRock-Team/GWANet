@@ -1,4 +1,3 @@
-using GWANet.Domain;
 using Xunit;
 
 namespace GWANet.SystemTests.MemScanner

@@ -1,13 +1,8 @@
-﻿using GWANet.Domain;
-using GWANet.Native.Structs;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using GWANet.Exceptions.MemScanner;
-using GWANet.Native;
+﻿using System.Diagnostics;
+using GWANet.MemScanner.Definitions;
+using GWANet.MemScanner.Exceptions;
 
-namespace GWANet
+namespace GWANet.MemScanner
 {
     public class MemScanner : IMemScanner
     {
@@ -41,15 +36,6 @@ namespace GWANet
             _moduleByteBuffer = new byte[module.ModuleMemorySize];
             _moduleMemorySize = module.ModuleMemorySize;
         }
-        
-        
-        /// <summary>
-        /// Used to add a pattern for parallel scanning
-        /// </summary>
-        /// <param name="returnAddress"> variable to store a returned address</param>
-        /// <param name="pattern"> byte pattern to add</param>
-        public void AddPattern(ulong returnAddress, BytePattern pattern)
-            => bytePatterns.Add(returnAddress, pattern);
 
         private bool PatternCheck(int nOffset, IEnumerable<byte> arrPattern)
         {
@@ -57,8 +43,18 @@ namespace GWANet
                         .Where((patternByte, patternIndex) => patternByte != 0x0 && patternByte != _moduleByteBuffer[nOffset + patternIndex])
                         .Any();
         }
-        
-        public ulong AobScan(BytePattern bytePattern)
+
+        public IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns)
+        {
+            throw new NotImplementedException();
+        }
+
+        PatternScanResult IMemScanner.AssertionScan(string assertionFileName, string assertionMsg, long hexOffset)
+        {
+            throw new NotImplementedException();
+        }
+
+        PatternScanResult IMemScanner.FindPattern(BytePattern bytePattern)
         {
             for (var moduleIndex = 0; moduleIndex < _moduleByteBuffer.Length; moduleIndex++)
             {
