@@ -1,3 +1,5 @@
+using System;
+
 namespace GWANet.MemScanner.Exceptions
 {
     [Serializable]

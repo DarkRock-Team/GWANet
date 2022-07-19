@@ -1,15 +1,27 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Runtime.Intrinsics.X86;
+using System.Threading.Tasks;
 using GWANet.MemScanner.Definitions;
 using GWANet.MemScanner.Exceptions;
+using GWANet.MemScanner.Native;
+using GWANet.MemScanner.SignatureScanner;
 
 namespace GWANet.MemScanner
 {
-    public class MemScanner : IMemScanner
+    /// <summary>
+    /// GW specific memory scanner
+    /// </summary>
+    public unsafe class MemScanner : IMemScanner
     {
         private readonly Process _gameProcess;
-        
+        private readonly ISignatureScannerEngine _scannerEngine;
+
         private byte[] _moduleByteBuffer;
-        private ulong _moduleBaseAddress;
+        private UIntPtr _moduleBaseAddress;
         private int _moduleMemorySize;
         private Dictionary<ulong, BytePattern> bytePatterns { get; }
 
@@ -23,7 +35,24 @@ namespace GWANet.MemScanner
 
             AssignModuleData(targetModule ?? gameProcess.MainModule);
 
-            Imports.ReadProcessMemory(_gameProcess.Handle, _moduleBaseAddress, _moduleByteBuffer, _moduleMemorySize);
+            Read(_moduleBaseAddress, out UIntPtr gameBaseAddress);
+
+            if (Avx2.IsSupported)
+            {
+                _scannerEngine = new SignatureScannerAvxEngine();
+                return;
+            }
+            if (Sse2.IsSupported)
+            {
+                _scannerEngine = new SignatureScannerSseEngine();
+                return;
+            }
+            _scannerEngine = new SignatureScannerCompiledEngine();
+        }
+
+        private void DetermineSignatureScannerEngine()
+        {
+
         }
 
         private void AssignModuleData(ProcessModule module)
@@ -32,9 +61,25 @@ namespace GWANet.MemScanner
             {
                 throw new InvalidProcessModuleException(_gameProcess.Id);
             }
-            _moduleBaseAddress = (ulong)module.BaseAddress;
+            _moduleBaseAddress = unchecked((UIntPtr)(long)module.BaseAddress);
             _moduleByteBuffer = new byte[module.ModuleMemorySize];
             _moduleMemorySize = module.ModuleMemorySize;
+        }
+
+        public void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged
+        {
+            int structSize = Unsafe.SizeOf<T>();
+            byte[] buffer = GC.AllocateUninitializedArray<byte>(structSize, false);
+
+            fixed (byte* bufferPtr = buffer)
+            {
+                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (UIntPtr)bufferPtr, (UIntPtr)structSize, out _);
+                if (!isSuccess)
+                {
+                    throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {structSize}");
+                }
+                value = Unsafe.Read<T>((void*)memoryAddress);
+            }
         }
 
         private bool PatternCheck(int nOffset, IEnumerable<byte> arrPattern)
@@ -46,47 +91,14 @@ namespace GWANet.MemScanner
 
         public IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns)
         {
-            throw new NotImplementedException();
-        }
-
-        PatternScanResult IMemScanner.AssertionScan(string assertionFileName, string assertionMsg, long hexOffset)
-        {
-            throw new NotImplementedException();
-        }
-
-        PatternScanResult IMemScanner.FindPattern(BytePattern bytePattern)
-        {
-            for (var moduleIndex = 0; moduleIndex < _moduleByteBuffer.Length; moduleIndex++)
-            {
-                // Check the beginning bytes of the module
-                if (_moduleByteBuffer[moduleIndex] != bytePattern.Pattern[0])
-                {
-                    continue;
-                }
-                    
-
-                if (PatternCheck(moduleIndex, bytePattern.Pattern))
-                {
-                    if (bytePattern.HexOffset < 0)
-                    {
-                        return (_moduleBaseAddress + (ulong)moduleIndex) - (ulong)bytePattern.HexOffset;
-                    }
-                    else
-                    {
-                        return (_moduleBaseAddress + (ulong)moduleIndex) + (ulong)bytePattern.HexOffset;
-                    }
-                }
-            }
-            return 0;
-        }
-
-        public ulong AssertionScan(string assertionFileName, string assertionMsg, long hexOffset)
-        {
-            throw new NotImplementedException();
-            if (!string.IsNullOrEmpty(assertionFileName))
+            var results = new PatternScanResult[bytePatterns.Count];
+            Parallel.ForEach(Partitioner.Create(0, bytePatterns.Count), tuple =>
             {
                 
-            }
+                for (int x = tuple.Item1; x < tuple.Item2; x++)
+                    results[x] = SignatureScanner.SignatureScanner.FindPattern(bytePatterns[x]);
+            });
+            return results;
         }
 
         public void Dispose()

@@ -1,5 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Security;
 using GWANet.MemScanner.Native.Enums;
 using GWANet.MemScanner.Native.Structs;
 
@@ -7,18 +9,20 @@ namespace GWANet.MemScanner.Native
 {
     internal class Imports
     {
-        [DllImport("kernel32.dll", SetLastError = true)]
+        [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
         public static extern IntPtr OpenProcess(uint processAccess, bool bInheritHandle, int processId);
         public static IntPtr OpenProcess(Process proc, ProcessAccessFlags flags)
             => OpenProcess((uint)flags, false, proc.Id);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool WriteProcessMemory(IntPtr hProcess, IntPtr lpBaseAddress, byte[] lpBuffer, int nSize, out IntPtr lpNumberOfBytesWritten);
+        [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool WriteProcessMemory([In] IntPtr hProcess, [In] UIntPtr lpBaseAddress, [In] UIntPtr lpBuffer, UIntPtr nSize, out UIntPtr lpNumberOfBytesWritten);
 
-        [DllImport("kernel32.dll", SetLastError = true)]
-        public static extern bool ReadProcessMemory(IntPtr hProcess, ulong lpBaseAddress, byte[] lpBuffer, int dwSize, int lpNumberOfBytesRead = 0);
+        [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ReadProcessMemory([In] IntPtr hProcess, [In] UIntPtr lpBaseAddress, UIntPtr lpBuffer, UIntPtr nSize, out UIntPtr lpNumberOfBytesRead);
 
-        [DllImport("kernel32.dll")]
-        public static extern int VirtualQueryEx(IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+        [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
+        public static extern int VirtualQueryEx([In] IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
     }
 }

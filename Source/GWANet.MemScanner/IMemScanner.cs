@@ -1,11 +1,12 @@
 using GWANet.MemScanner.Definitions;
+using GWANet.MemScanner.SignatureScanner;
+using System;
+using System.Collections.Generic;
 
 namespace GWANet.MemScanner
 {
     internal interface IMemScanner : IDisposable
     {
-        PatternScanResult FindPattern(BytePattern bytePattern);
-        IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns);
-        PatternScanResult AssertionScan(string assertionFileName, string assertionMsg, long hexOffset);
+        void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged;
     }
 }

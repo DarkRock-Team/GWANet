@@ -1,4 +1,6 @@
-﻿namespace GWANet.MemScanner.Exceptions
+﻿using System;
+
+namespace GWANet.MemScanner.Exceptions
 {
     [Serializable]
     public sealed class InvalidProcessHandleException : InvalidOperationException
