@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
-using GWANet.Native.Enums;
-using GWANet.Domain;
+using GWANet.Main.Domain;
 using GWANet.Main.Exceptions;
+using GWANet.Scanner;
 
-namespace GWANet
+namespace GWANet.Main
 {
     public sealed class GWANet : IGWANet
     {
         private const string ProcessName = "Gw";
-        private MemScanner _memScanner; 
+        private IMemScanner _memScanner; 
 
         public void Initialize(string characterName, bool isChangeGameTitle)
         {
@@ -34,17 +32,12 @@ namespace GWANet
                 ScanForCharacterName(processes.First());
             }
         }
-        private static IntPtr OpenProcess(int processId)
-        {
-            var processHandle = Native.Imports.OpenProcess((uint)ProcessAccessFlags.All, bInheritHandle: false, processId);
-            return processHandle;
-        }
         private string ScanForCharacterName(in Process gameProcess)
         {
-            _memScanner ??= new MemScanner(gameProcess);
+            _memScanner ??= new Scanner.MemScanner(gameProcess);
 
-            var basePtr = _memScanner.AobScan(AobPatterns.ScanBasePtr);
-            if (basePtr != 0)
+            var basePtr = _memScanner.FindPattern(AobPatterns.ScanBasePtr);
+            if (basePtr.IsFound)
             {
                 
             }

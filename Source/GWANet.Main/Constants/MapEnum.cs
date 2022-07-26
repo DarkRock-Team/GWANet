@@ -1,4 +1,4 @@
-namespace GWANet.Constants
+namespace GWANet.Main.Constants
 {
     /// <summary>
     /// Region ids, have to be used with corresponding district ids

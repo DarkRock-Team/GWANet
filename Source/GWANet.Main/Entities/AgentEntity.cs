@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace GWANet.Entities
+namespace GWANet.Main.Entities
 {
     internal class AgentEntity
     {

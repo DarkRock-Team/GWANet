@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
-namespace GWANet.Context
+namespace GWANet.Main.Context
 {
     internal struct LoginCharacter
     {

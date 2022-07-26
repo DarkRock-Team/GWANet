@@ -29,7 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GWANet.MemScanner\GWANet.MemScanner.csproj" />
+    <ProjectReference Include="..\GWANet.Scanner\GWANet.Scanner.csproj" />
   </ItemGroup>
 
 </Project>

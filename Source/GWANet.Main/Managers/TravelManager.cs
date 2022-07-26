@@ -1,4 +1,4 @@
-﻿namespace GWANet.Managers
+﻿namespace GWANet.Main.Managers
 {
     internal class TravelManager
     {

@@ -1,4 +1,4 @@
-namespace GWANet.Constants
+namespace GWANet.Main.Constants
 {
     internal enum SkillIdEnum : ushort
     {

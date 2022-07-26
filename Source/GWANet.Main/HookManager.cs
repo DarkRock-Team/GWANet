@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GWANet
+﻿namespace GWANet.Main
 {
     /// <summary>
     /// Provides abstraction layer between GWANet logic and hooking library used (MinHook.NET)

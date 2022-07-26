@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GWANet
+namespace GWANet.Main
 {
     public interface IGWANet : IDisposable
     {

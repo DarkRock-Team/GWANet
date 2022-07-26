@@ -1,48 +1,32 @@
-using System;
-using System.Text;
-using GWANet.MemScanner.Definitions;
+using GWANet.Scanner.Definitions;
 
-namespace GWANet.Domain
+namespace GWANet.Main.Domain
 {
-    // TODO: Think about moving related patterns to the suitable managers in the future
+    // TODO: Move related patterns to separate classes
     public static class AobPatterns
     {
-        public static readonly BytePattern ScanBasePtr = 
-            new BytePattern(new byte[] { 0x50 ,0x6A, 0x0F, 0x6A, 0x00, 0xFF, 0x35 }, 0x7);
+        public static readonly BytePattern ScanBasePtr = new("50 6A 0F 6A 00 FF 35", 0x7);
 
-        public static readonly BytePattern GameVersion =
-            new BytePattern(new byte[] {0x6A, 0x00, 0x68, 0x00, 0x00, 0x01, 0x00, 0x89}, 0x42);
+        public static readonly BytePattern GameVersion = new("6A 00 68 00 00 01 00 89", 0x42);
         #region Agent
-        public static readonly BytePattern ScanAgentBasePtr =
-            new BytePattern(new byte[] { 0xFF, 0x50, 0x10, 0x47, 0x83, 0xC6, 0x04, 0x3B, 0xFB, 0x75, 0xE1 }, 0xD);
-        public static readonly BytePattern MoveAgentFuncPtr =
-            new BytePattern(new byte[] { 0xDF, 0xE0, 0xF6, 0xC4, 0x41, 0x7B, 0x64, 0x56, 0xE8 }, -0x48);
+        public static readonly BytePattern ScanAgentBasePtr = new("FF 50 10 47 83 C6 04 3B FB 75 E1", 0xD);
+        public static readonly BytePattern MoveAgentFuncPtr = new("DF E0 F6 C4 41 7B 64 56 E8", -0x48);
 
-        public static readonly BytePattern MovementChangeAgentFuncPtr =
-            new BytePattern(new byte[] { 0x0C, 0x05, 0x6F, 0xFF, 0xFF, 0xFF }, -0x9);
-        public static readonly BytePattern PlayerAgentIdPtr =
-            new BytePattern(new byte[] { 0x5D, 0xE9, 0x00, 0x00, 0x00, 0x00, 0x55, 0x8B, 0xEC, 0x53 }, -0xE);
+        public static readonly BytePattern MovementChangeAgentFuncPtr = new("0C 05 6F FF FF FF", -0x9);
+        public static readonly BytePattern PlayerAgentIdPtr = new("5D E9 00 00 00 00 55 8B EC 53", -0xE);
         #endregion
         
         #region Map byte patterns
-        public static readonly BytePattern ScanMapInfo = 
-            new BytePattern(new byte[] { 0x8B, 0xF0, 0xEB, 0x03, 0x8B, 0x75, 0x0C, 0x3B }, 0xA);
-        public static readonly BytePattern ScanAreaInfo = 
-            new BytePattern(new byte[] {0x6B, 0xC6, 0x7C, 0x5E, 0x05 }, 0x5);
-        public static readonly BytePattern ScanMapId = 
-            new BytePattern(new byte[] {0xE8, 0x00, 0x00, 0x00, 0x00, 0x6A, 0x3D, 0x57, 0xE8 }, -0x4, "x????xxxx");
-        public static readonly BytePattern ScanInstanceType =
-            new BytePattern(new byte[] {0x6A, 0x2C, 0x50, 0xE8, 0x00, 0x00, 0x00, 0x00, 0x83, 0xC4, 0x08, 0xC7 }, 0x17, "xxxx????xxxx");
+        public static readonly BytePattern ScanMapInfo = new("8B F0 EB 03 8B 75 0C 3B ", 0xA);
+        public static readonly BytePattern ScanAreaInfo = new("6B C6 7C 5E 05", 0x5);
+        public static readonly BytePattern ScanMapId = new("E8 ?? ?? ?? ?? 6A 3D 57 E8", -0x4);
+        public static readonly BytePattern ScanInstanceType = new("6A 2C 50 E8 ?? ?? ?? ?? 83 C4 08 C7", 0x17);
         #endregion
         #region Item byte patterns
-        public static readonly BytePattern ScanItemTooltip = 
-            new BytePattern(new byte[] { 0x8B, 0x40, 0x40, 0x89, 0x45, 0xFC }, -0xF);
-        public static readonly BytePattern ScanItemClick = 
-            new BytePattern(new byte[] { 0x8B, 0x48, 0x08, 0x83, 0xEA, 0x00, 0x0F, 0x84 }, -0x1C);
-        public static readonly BytePattern ScanStorageOpen = 
-            new BytePattern(new byte[] { 0xC7, 0x00, 0x0F, 0x00, 0x00, 0x00, 0x89, 0x48, 0x14 }, -0x28);
-        public static readonly BytePattern ScanStoragePanel = 
-            new BytePattern(new byte[] { 0x0F, 0x84, 0x5D, 0x01, 0x00, 0x00, 0x83, 0x7B, 0x14 }, -0x4);
+        public static readonly BytePattern ScanItemTooltip = new("8B 40 40 89 45 FC", -0xF);
+        public static readonly BytePattern ScanItemClick = new("8B 48 08 83 EA 00 0F 84", -0x1C);
+        public static readonly BytePattern ScanStorageOpen = new("C7 00 0F 00 00 00 89 48 14", -0x28);
+        public static readonly BytePattern ScanStoragePanel = new("0F 84 5D 01 00 00 83 7B 14", -0x4);
         #endregion
     }
 }
