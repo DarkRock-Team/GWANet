@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Runtime.Intrinsics.X86;
 using System.Threading.Tasks;
 using GWANet.Scanner.Definitions;
@@ -75,6 +76,24 @@ namespace GWANet.Scanner
                     throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {structSize}");
                 }
                 value = Unsafe.Read<T>((void*)memoryAddress);
+            }
+        }
+        public void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged
+        {
+            var itemSize = Unsafe.SizeOf<T>();
+            byte[] bytes = GC.AllocateUninitializedArray<byte>(itemSize, false);
+            var arraySpan = new Span<byte>(bytes);
+            MemoryMarshal.Write(arraySpan, ref item);
+
+            fixed (byte* bytePtr = bytes)
+            {
+                var isSuccess = Imports.WriteProcessMemory(_gameProcess.Handle, memoryAddress, (UIntPtr)bytePtr, (UIntPtr)bytes.Length, out _);
+
+                if (!isSuccess)
+                {
+                    throw new MemoryOperationException($"WriteProcessMemory failed to write {bytes.Length} bytes of memory to {memoryAddress}");
+                }
+                    
             }
         }
 
