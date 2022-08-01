@@ -21,6 +21,10 @@ namespace GWANet.Scanner.Native
         [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ReadProcessMemory([In] IntPtr hProcess, [In] UIntPtr lpBaseAddress, UIntPtr lpBuffer, UIntPtr nSize, out UIntPtr lpNumberOfBytesRead);
+        
+        [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool ReadProcessMemory([In] IntPtr hProcess, [In] IntPtr lpBaseAddress, IntPtr lpBuffer, UIntPtr nSize, out UIntPtr lpNumberOfBytesRead);
 
         [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
         public static extern int VirtualQueryEx([In] IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);

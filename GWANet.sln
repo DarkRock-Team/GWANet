@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31112.23
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Main", "Source\GWANet.Main\GWANet.Main.csproj", "{1439CB8F-510F-4FD2-84BF-71B330B8982F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.Scanner", "Source\GWANet.Scanner\GWANet.Scanner.csproj", "{06B5F9B2-C2AB-4877-B5E0-1AA400072838}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Scanner", "Source\GWANet.Scanner\GWANet.Scanner.csproj", "{06B5F9B2-C2AB-4877-B5E0-1AA400072838}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Scanner.SystemTests", "Tests\GWANet.Scanner.SystemTests\GWANet.Scanner.SystemTests.csproj", "{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.Scanner.UnitTests", "Tests\GWANet.Scanner.UnitTests\GWANet.Scanner.UnitTests.csproj", "{E2EF9491-1D67-444F-A0D9-AC0A091D5532}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Scanner.UnitTests", "Tests\GWANet.Scanner.UnitTests\GWANet.Scanner.UnitTests.csproj", "{E2EF9491-1D67-444F-A0D9-AC0A091D5532}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +27,14 @@ Global
 		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Release|x64.ActiveCfg = Release|x64
 		{1439CB8F-510F-4FD2-84BF-71B330B8982F}.Release|x64.Build.0 = Release|x64
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.ActiveCfg = Debug|x64
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.Build.0 = Debug|x64
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.ActiveCfg = Release|Any CPU
+		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.Build.0 = Release|Any CPU
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Debug|x64.ActiveCfg = Debug|x64
@@ -35,14 +43,6 @@ Global
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|x64.ActiveCfg = Release|x64
 		{89607FD6-5B24-4E2F-A2F1-0504A3CCBBB0}.Release|x64.Build.0 = Release|x64
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Debug|x64.Build.0 = Debug|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.ActiveCfg = Release|Any CPU
-		{06B5F9B2-C2AB-4877-B5E0-1AA400072838}.Release|x64.Build.0 = Release|Any CPU
 		{E2EF9491-1D67-444F-A0D9-AC0A091D5532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E2EF9491-1D67-444F-A0D9-AC0A091D5532}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E2EF9491-1D67-444F-A0D9-AC0A091D5532}.Debug|x64.ActiveCfg = Debug|Any CPU

@@ -9,7 +9,7 @@ namespace GWANet.Scanner.Definitions
     {
         public byte[] Pattern { get; init; }
         public byte[] Mask { get; }
-        public long HexOffset { get; }
+        public long Offset { get; }
         
         private static readonly object CtorLock = new();
         private static readonly char[] MaskIgnore = { '?', '?' };
@@ -21,8 +21,9 @@ namespace GWANet.Scanner.Definitions
         /// <param name="offset">Offset from AoB scan result.</param>
         public BytePattern(string pattern, long offset)
         {
-            var bytes = new List<byte>(1024);
-            var maskBuilder = new List<byte>(1024);
+            Offset = offset;
+            var bytes = new List<byte>(256);
+            var maskBuilder = new List<byte>(256);
         
             var enumerator = new SpanSplitEnumerator<char>(pattern, ' ');
             var questionMarkFlag = new ReadOnlySpan<char>( MaskIgnore);

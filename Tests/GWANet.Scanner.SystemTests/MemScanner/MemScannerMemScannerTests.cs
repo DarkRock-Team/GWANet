@@ -5,7 +5,7 @@ namespace GWANet.Scanner.SystemTests.MemScanner
 {
     public class MemScannerMemScannerTests : MemScannerTestBase
     {
-        [Fact]
+        //[Fact]
         public void Given_ValidGameProcess_Ctor_ShouldCreateMemScanner()
         {
             var memScanner = new Scanner.MemScanner(GameProcess);

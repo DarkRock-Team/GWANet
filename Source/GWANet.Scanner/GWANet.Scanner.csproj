@@ -14,6 +14,8 @@
         <Product>GWANet.Scanner</Product>
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
+        <PlatformTarget>x64</PlatformTarget>
+        <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,7 +23,17 @@
       <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       <DebugType>full</DebugType>
       <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
     </PropertyGroup>

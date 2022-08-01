@@ -28,7 +28,9 @@ namespace GWANet.Scanner.SignatureScanner
             return matchTable;
         }
 
-        public PatternScanResult FindPattern(byte* data, int dataLength, BytePattern pattern)
+        public abstract PatternScanResult FindPattern(byte* data, int dataLength, BytePattern pattern);
+
+        protected static PatternScanResult FindPatternSimple(byte* data, int dataLength, BytePattern pattern)
         {
             var patternData = pattern.Pattern;
             var patternMask = pattern.Mask;

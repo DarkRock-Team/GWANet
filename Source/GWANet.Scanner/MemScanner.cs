@@ -21,24 +21,22 @@ namespace GWANet.Scanner
     {
         private readonly Process _gameProcess;
         private readonly SignatureScannerEngine _scannerEngine;
-
-        private byte[] _moduleByteBuffer;
-        private UIntPtr _moduleBaseAddress;
+        private byte* _moduleDataPtr;
         private int _moduleMemorySize;
+        private GCHandle? _gcHandle;
+        
+        private bool _isDisposed;
         private Dictionary<ulong, BytePattern> bytePatterns { get; }
 
-        public MemScanner(Process gameProcess, ProcessModule targetModule = null)
+        public MemScanner(Process gameProcess, ProcessModule? targetModule = null)
         {
             if (gameProcess.Handle == IntPtr.Zero)
             {
-                throw new InvalidProcessHandleException(gameProcess.Handle.ToString());
+                throw new InvalidProcessHandleException(gameProcess.Handle.ToString(), gameProcess.HasExited);
             }
             _gameProcess = gameProcess;
 
-            AssignModuleData(targetModule ?? gameProcess.MainModule);
-
-            Read(_moduleBaseAddress, out UIntPtr gameBaseAddress);
-
+            AssignModuleData((targetModule ?? gameProcess.MainModule)!);
             if (Avx2.IsSupported)
             {
                 _scannerEngine = new SignatureScannerAvxEngine();
@@ -54,13 +52,17 @@ namespace GWANet.Scanner
 
         private void AssignModuleData(ProcessModule module)
         {
-            if (module is null)
+            ReadBytes(module.BaseAddress, out var gameBaseModuleData, module.ModuleMemorySize);
+            
+            // pin gameBaseModuleData so GC won't corrupt it
+            _gcHandle = GCHandle.Alloc(gameBaseModuleData, GCHandleType.Pinned);
+            _moduleDataPtr = (byte*)_gcHandle.Value.AddrOfPinnedObject();
+            _moduleMemorySize = gameBaseModuleData.Length;
+            
+            if (module is null || gameBaseModuleData.LongLength <= 0)
             {
-                throw new InvalidProcessModuleException(_gameProcess.Id);
+                throw new InvalidProcessModuleException(_gameProcess.Id, gameBaseModuleData.LongLength);
             }
-            _moduleBaseAddress = (UIntPtr)(long)module.BaseAddress;
-            _moduleByteBuffer = new byte[module.ModuleMemorySize];
-            _moduleMemorySize = module.ModuleMemorySize;
         }
 
         public void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged
@@ -76,6 +78,19 @@ namespace GWANet.Scanner
                     throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {structSize}");
                 }
                 value = Unsafe.Read<T>((void*)memoryAddress);
+            }
+        }
+
+        public void ReadBytes(IntPtr memoryAddress, out byte[] value, int length)
+        {
+            value = GC.AllocateUninitializedArray<byte>(length, false);
+            fixed (byte* bufferPtr = value)
+            {
+                var isSuccess = Imports.ReadProcessMemory(_gameProcess.Handle, memoryAddress, (IntPtr)bufferPtr, (UIntPtr) value.Length, out _);
+                if (!isSuccess)
+                {
+                    throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {length}");
+                }
             }
         }
         public void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged
@@ -102,8 +117,8 @@ namespace GWANet.Scanner
             var results = new PatternScanResult[bytePatterns.Count];
             Parallel.ForEach(Partitioner.Create(0, bytePatterns.Count), tuple =>
             {
-                for (int x = tuple.Item1; x < tuple.Item2; x++)
-                    results[x] = _scannerEngine.FindPattern((byte*)_moduleBaseAddress,_moduleMemorySize, bytePatterns[x]);
+                for (var x = tuple.Item1; x < tuple.Item2; x++)
+                    results[x] = _scannerEngine.FindPattern(_moduleDataPtr + bytePatterns[x].Offset, _moduleMemorySize, bytePatterns[x]);
             });
             return results;
         }
@@ -111,13 +126,20 @@ namespace GWANet.Scanner
         public PatternScanResult FindPattern(BytePattern bytePattern, long offset = 0)
         {
             return _scannerEngine
-                .FindPattern((byte*) _moduleBaseAddress, _moduleMemorySize, bytePattern)
+                .FindPattern(_moduleDataPtr + offset, _moduleMemorySize - (int)offset, bytePattern)
                 .AddOffset(offset);
         }
 
         public void Dispose()
         {
+            if (_isDisposed)
+            {
+                return;
+            }
+            
+            _gcHandle?.Free();
             _gameProcess.Dispose();
+            _isDisposed = true;
             GC.SuppressFinalize(this);
         }
     }

@@ -14,7 +14,7 @@ internal unsafe class SignatureScannerAvxEngine : SignatureScannerEngine
 
     [SkipLocalsInit]
     [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-    public new PatternScanResult FindPattern(byte* data, int dataLength, BytePattern pattern)
+    public override PatternScanResult FindPattern(byte* data, int dataLength, BytePattern pattern)
     {
         var dataPtr = data;
         var matchTable = BuildFullMatchTable(pattern);
@@ -28,7 +28,7 @@ internal unsafe class SignatureScannerAvxEngine : SignatureScannerEngine
         var firstByteVec = Vector256.Create(pattern.Pattern[0]);
         ref var pFirstVec = ref firstByteVec;
 
-        var simdJump = AvxRegisterLength - 1;
+        const int simdJump = AvxRegisterLength - 1;
         var searchLength = dataLength - Math.Max(pattern.Pattern.Length, AvxRegisterLength);
         var position = 0;
         for (; position < searchLength; position++, dataPtr += 1)
@@ -86,7 +86,7 @@ internal unsafe class SignatureScannerAvxEngine : SignatureScannerEngine
         }
 
         // Check last few bytes in cases pattern was not found and long overflows into possibly unallocated memory.
-        return base.FindPattern(data + position, dataLength - position, pattern).AddOffset(position);
+        return FindPatternSimple(data + position, dataLength - position, pattern).AddOffset(position);
     }
 
     private static Vector256<byte>[] GenerateVectorPadding(in BytePattern pattern)

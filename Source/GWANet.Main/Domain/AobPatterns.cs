@@ -17,7 +17,7 @@ namespace GWANet.Main.Domain
         #endregion
         
         #region Map byte patterns
-        public static readonly BytePattern ScanMapInfo = new("8B F0 EB 03 8B 75 0C 3B ", 0xA);
+        public static readonly BytePattern ScanMapInfo = new("8B F0 EB 03 8B 75 0C 3B", 0xA);
         public static readonly BytePattern ScanAreaInfo = new("6B C6 7C 5E 05", 0x5);
         public static readonly BytePattern ScanMapId = new("E8 ?? ?? ?? ?? 6A 3D 57 E8", -0x4);
         public static readonly BytePattern ScanInstanceType = new("6A 2C 50 E8 ?? ?? ?? ?? 83 C4 08 C7", 0x17);
