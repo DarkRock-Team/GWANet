@@ -5,7 +5,7 @@ using GWANet.Scanner.SignatureScanner.Definitions;
 
 namespace GWANet.Scanner.SignatureScanner
 {
-    internal abstract unsafe class SignatureScannerEngine
+    public abstract unsafe class SignatureScannerEngine
     {
         [SkipLocalsInit]
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
