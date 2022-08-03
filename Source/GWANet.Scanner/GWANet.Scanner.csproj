@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+        <Authors>Madpixel6</Authors>
+        <PackageProjectUrl>https://github.com/DarkRock-Team/GWANet</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/DarkRock-Team/GWANet</RepositoryUrl>
+        <AssemblyName>GWANet.Scanner</AssemblyName>
+        <RootNamespace>GWANet.Scanner</RootNamespace>
+        <PackageId>GWANet.Scanner</PackageId>
+        <Product>GWANet.Scanner</Product>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <FileVersion>1.0.0</FileVersion>
+        <PlatformTarget>x64</PlatformTarget>
+        <Platforms>AnyCPU;x64</Platforms>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+      <DebugType>full</DebugType>
+      <WarningsAsErrors>$(WarningsAsErrors);NU1605;</WarningsAsErrors>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <InternalsVisibleTo Include="$(AssemblyName).SystemTests" />
+        <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+    </ItemGroup>
+
+</Project>
