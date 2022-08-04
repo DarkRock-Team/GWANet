@@ -14,9 +14,6 @@ using GWANet.Scanner.SignatureScanner.Definitions;
 
 namespace GWANet.Scanner
 {
-    /// <summary>
-    /// GW specific memory scanner
-    /// </summary>
     public unsafe class MemScanner : IMemScanner
     {
         private readonly Process _gameProcess;
@@ -26,7 +23,6 @@ namespace GWANet.Scanner
         private GCHandle? _gcHandle;
         
         private bool _isDisposed;
-        private Dictionary<ulong, BytePattern> bytePatterns { get; }
 
         public MemScanner(Process gameProcess, ProcessModule? targetModule = null)
         {
@@ -67,8 +63,8 @@ namespace GWANet.Scanner
 
         public void Read<T>(UIntPtr memoryAddress, out T value) where T : unmanaged
         {
-            int structSize = Unsafe.SizeOf<T>();
-            byte[] buffer = GC.AllocateUninitializedArray<byte>(structSize, false);
+            var structSize = Unsafe.SizeOf<T>();
+            var buffer = GC.AllocateUninitializedArray<byte>(structSize, false);
 
             fixed (byte* bufferPtr = buffer)
             {
@@ -96,7 +92,7 @@ namespace GWANet.Scanner
         public void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged
         {
             var itemSize = Unsafe.SizeOf<T>();
-            byte[] bytes = GC.AllocateUninitializedArray<byte>(itemSize, false);
+            var bytes = GC.AllocateUninitializedArray<byte>(itemSize, false);
             var arraySpan = new Span<byte>(bytes);
             MemoryMarshal.Write(arraySpan, ref item);
 

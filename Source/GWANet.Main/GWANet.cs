@@ -34,7 +34,7 @@ namespace GWANet.Main
         }
         private string ScanForCharacterName(in Process gameProcess)
         {
-            _memScanner ??= new Scanner.MemScanner(gameProcess);
+            _memScanner ??= new MemScanner(gameProcess);
 
             var basePtr = _memScanner.FindPattern(AobPatterns.ScanBasePtr);
             if (basePtr.IsFound)

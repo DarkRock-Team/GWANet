@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GWANet.Scanner.UnitTests.Extensions;
 
-public class SpanSplitEnumeratorTests
+public sealed class SpanSplitEnumeratorTests
 {
     [Fact]
     public void MoveNext_Should_SetCurrent()

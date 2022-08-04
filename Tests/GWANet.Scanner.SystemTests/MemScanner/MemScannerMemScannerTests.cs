@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GWANet.Scanner.SystemTests.MemScanner
 {
-    public class MemScannerMemScannerTests : MemScannerTestBase
+    public sealed class MemScannerMemScannerTests : MemScannerTestBase
     {
         //[Fact]
         public void Given_ValidGameProcess_Ctor_ShouldCreateMemScanner()

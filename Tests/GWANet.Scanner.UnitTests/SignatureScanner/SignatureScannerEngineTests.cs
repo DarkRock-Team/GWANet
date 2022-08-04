@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GWANet.Scanner.UnitTests.SignatureScanner;
 
-public class SignatureScannerEngineTests
+public sealed class SignatureScannerEngineTests
 {
     [Fact]
     public void BuildFullMatchTable_Should_ReturnValidTable()

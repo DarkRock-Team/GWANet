@@ -4,7 +4,7 @@ using GWANet.Scanner.SignatureScanner.Definitions;
 
 namespace GWANet.Scanner.UnitTests.SignatureScanner;
 
-public class SignatureScannerEngineTestWrapper : SignatureScannerEngine
+public sealed class SignatureScannerEngineTestWrapper : SignatureScannerEngine
 {
     public static ReadOnlySpan<ushort> BuildFullMatchTableWrapped(in BytePattern pattern)
     {

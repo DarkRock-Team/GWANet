@@ -32,4 +32,9 @@
     <ProjectReference Include="..\GWANet.Scanner\GWANet.Scanner.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="$(AssemblyName).SystemTests" />
+    <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
+  </ItemGroup>
+
 </Project>
