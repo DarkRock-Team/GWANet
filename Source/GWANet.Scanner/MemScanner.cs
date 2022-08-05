@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using GWANet.Scanner.Definitions;
 using GWANet.Scanner.Exceptions;
 using GWANet.Scanner.Native;
+using GWANet.Scanner.Native.Enums;
 using GWANet.Scanner.SignatureScanner;
 using GWANet.Scanner.SignatureScanner.Definitions;
 
@@ -73,7 +74,7 @@ namespace GWANet.Scanner
                 {
                     throw new MemoryOperationException($"ReadProcessMemory failed to read from {memoryAddress}, bytes: {structSize}");
                 }
-                value = Unsafe.Read<T>((void*)memoryAddress);
+                value = Unsafe.Read<T>(bufferPtr);
             }
         }
 
@@ -107,6 +108,22 @@ namespace GWANet.Scanner
                     
             }
         }
+        
+        public MemPageProtection ChangePageProtection(UIntPtr memoryAddress, long size, MemPageProtection newProtection)
+        {
+            var isSuccess = Imports.VirtualProtectEx(_gameProcess.Handle, memoryAddress, (UIntPtr) size, newProtection, out var oldPermissions);
+
+            if (!isSuccess)
+            {
+                throw new MemoryOperationException($"Unable to change permissions for " +
+                                                   $"the memory address: {memoryAddress} ," +
+                                                   $"size: {size} ," +
+                                                   $"new protection: {newProtection.ToString()} ," +
+                                                   $"old protection: {oldPermissions.ToString()}");
+            }
+
+            return oldPermissions;
+        }
 
         public IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns)
         {
@@ -119,11 +136,11 @@ namespace GWANet.Scanner
             return results;
         }
 
-        public PatternScanResult FindPattern(BytePattern bytePattern, long offset = 0)
+        public PatternScanResult FindPattern(BytePattern bytePattern)
         {
             return _scannerEngine
-                .FindPattern(_moduleDataPtr + offset, _moduleMemorySize - (int)offset, bytePattern)
-                .AddOffset(offset);
+                .FindPattern(_moduleDataPtr, _moduleMemorySize - (int)bytePattern.Offset, bytePattern)
+                .AddOffset(bytePattern.Offset);
         }
 
         public void Dispose()

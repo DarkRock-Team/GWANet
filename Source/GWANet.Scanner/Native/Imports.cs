@@ -28,5 +28,9 @@ namespace GWANet.Scanner.Native
 
         [DllImport("kernel32.dll"), SuppressUnmanagedCodeSecurity]
         public static extern int VirtualQueryEx([In] IntPtr hProcess, IntPtr lpAddress, out MEMORY_BASIC_INFORMATION lpBuffer, uint dwLength);
+        
+        [DllImport("kernel32.dll", SetLastError = true), SuppressUnmanagedCodeSecurity]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool VirtualProtectEx([In] IntPtr hProcess, [In] UIntPtr lpAddress, UIntPtr dwSize, MemPageProtection flNewProtect, out MemPageProtection lpflOldProtect);
     }
 }

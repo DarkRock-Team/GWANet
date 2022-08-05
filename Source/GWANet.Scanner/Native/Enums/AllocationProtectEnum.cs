@@ -6,7 +6,7 @@ namespace GWANet.Scanner.Native.Enums
     /// Memory protection options; must be defined when allocating or protecting a memory page
     /// </summary>
     [Flags]
-    internal enum MemPageProtection : uint
+    public enum MemPageProtection : uint
     {
         PAGE_EXECUTE = 0x00000010,
         PAGE_EXECUTE_READ = 0x00000020,

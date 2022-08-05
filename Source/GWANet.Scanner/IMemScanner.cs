@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GWANet.Scanner.Definitions;
+using GWANet.Scanner.Native.Enums;
 using GWANet.Scanner.SignatureScanner.Definitions;
 
 namespace GWANet.Scanner;
@@ -11,5 +12,6 @@ public interface IMemScanner : IDisposable
     void ReadBytes(IntPtr memoryAddress, out byte[] value, int length);
     void Write<T>(UIntPtr memoryAddress, ref T item) where T : unmanaged;
     IEnumerable<PatternScanResult> FindPatterns(IReadOnlyList<BytePattern> bytePatterns);
-    PatternScanResult FindPattern(BytePattern bytePattern, long offset = 0);
+    PatternScanResult FindPattern(BytePattern bytePattern);
+    MemPageProtection ChangePageProtection(UIntPtr memoryAddress, long size, MemPageProtection newProtection);
 }
