@@ -37,4 +37,8 @@
     <InternalsVisibleTo Include="$(AssemblyName).UnitTests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Domain\Chat" />
+  </ItemGroup>
+
 </Project>

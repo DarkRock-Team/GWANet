@@ -1,11 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using GWANet.Main.Domain;
 using GWANet.Main.Exceptions;
+using GWANet.Main.Settings;
 using GWANet.Scanner;
-using GWANet.Scanner.Native.Enums;
+using GWANet.Scanner.Definitions;
 
 namespace GWANet.Main
 {
@@ -14,30 +16,37 @@ namespace GWANet.Main
         private const string ProcessName = "Gw";
         private IMemScanner _memScanner; 
 
-        public void Initialize(string characterName, bool isChangeGameTitle = false)
+        public void Initialize(InitializationSettings settings = default)
         {
-            var processes = Process.GetProcessesByName(ProcessName);
-            if (processes is { Length: < 1 })
+            var gwProcess = Process.GetProcessesByName(ProcessName).FirstOrDefault();
+            if (gwProcess is null)
             {
                 throw new GameProcessNotFoundException();
             }
+            InitializeMemScanner(gwProcess);
 
-            if (!string.IsNullOrEmpty(characterName))
+            if (settings!.ChangeGameTitle && !string.IsNullOrEmpty(settings.CharacterName))
             {
-                foreach(var process in processes)
-                {
-                    ScanForCharacterName(process);
-                }
+                var characterName = ScanForCharacterName();
             }
-            // Initialize for a single game instance
-            else
+
+            var patternsToScan = new List<BytePattern>();
+
+            if (settings.InitializeChat)
             {
-                ScanForCharacterName(processes.First());
+                patternsToScan.AddRange(PrepareChatAobs());
             }
+            
+            InitializeGamePointers(patternsToScan);
         }
-        private string ScanForCharacterName(in Process gameProcess)
+
+        private void InitializeMemScanner(in Process gameProcess)
         {
             _memScanner ??= new MemScanner(gameProcess);
+            GamePointers.MainModuleBaseAddress = (int)gameProcess.MainModule!.BaseAddress;
+        }
+        private string ScanForCharacterName()
+        {
             const int maxCharacterNameLengthSize = 40; // 2* maximum character name length
             
             var charNameScanResult = _memScanner.FindPattern(AobPatterns.CharacterName);
@@ -46,12 +55,12 @@ namespace GWANet.Main
             {
                 throw new PatternNotFoundException(nameof(AobPatterns.CharacterName));
             }
-            
-            var mainModuleBaseAddr = (int)gameProcess.MainModule!.BaseAddress;
-            var charNameAddr = unchecked((UIntPtr) (mainModuleBaseAddr + charNameScanResult.Offset));
+
+            var charNameAddr = unchecked((UIntPtr) (GamePointers.MainModuleBaseAddress + charNameScanResult.Offset));
 
             _memScanner.Read(charNameAddr, out int charNamePtr);
-            _memScanner.ReadBytes((IntPtr)(charNamePtr + 0x10), out var charNameBytes, maxCharacterNameLengthSize);
+            GamePointers.CharacterName = (IntPtr)charNamePtr + 0x10;
+            _memScanner.ReadBytes(GamePointers.CharacterName, out var charNameBytes, maxCharacterNameLengthSize);
             var charName = Encoding.Unicode.GetString(charNameBytes, 0, charNameBytes.Length);
             
             if (string.IsNullOrEmpty(charName))
@@ -62,9 +71,37 @@ namespace GWANet.Main
             return charName;
         }
 
-        private void InitializeManagers()
+        private static IEnumerable<BytePattern> PrepareChatAobs()
+         => new List<BytePattern>
+            {
+                AobPatterns.ChatEvent,
+                AobPatterns.GetSenderColor,
+                AobPatterns.GetMessageColor,
+                AobPatterns.LocalMessage,
+                AobPatterns.SendChat,
+                AobPatterns.StartWhisper,
+                AobPatterns.WriteWhisper,
+                AobPatterns.PrintChat,
+                AobPatterns.AddToChatLog,
+                AobPatterns.ChatBuffer,
+                AobPatterns.IsTyping
+            };
+
+        private void InitializeGamePointers(List<BytePattern> patternsToScan)
         {
-            
+            patternsToScan.AddRange(new List<BytePattern>
+            {
+                AobPatterns.ScanBasePtr,
+                // Agent
+                AobPatterns.ScanAgentBasePtr,
+                AobPatterns.ChangeTargetFunc,
+                AobPatterns.PlayerAgentIdPtr,
+                AobPatterns.SendDialog,
+                AobPatterns.InteractAgent
+            }); 
+            var scanResults = _memScanner.FindPatterns(patternsToScan);
+
+            return;
         }
 
         public void Dispose()
