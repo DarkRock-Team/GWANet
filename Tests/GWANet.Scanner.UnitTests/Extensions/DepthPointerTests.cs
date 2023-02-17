@@ -3,7 +3,7 @@ using Xunit;
 
 namespace GWANet.Scanner.UnitTests.Extensions;
 
-public class DepthPointerTests
+public sealed class DepthPointerTests
 {
     [Fact]
     public unsafe void DepthPointer_Should_DereferenceFail()
