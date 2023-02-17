@@ -7,21 +7,21 @@ namespace GWANet.Scanner.Extensions;
 /// </summary>
 internal ref struct SpanSplitEnumerator<T> where T : IEquatable<T>
 {
-    public T SplitItem { get; private set; }
+    public T SplitItem { get; }
     public ReadOnlySpan<T> Current { get; private set; }
     private ReadOnlySpan<T> _original;
-    private bool _reachedEnd;
+    private bool _isReachedEnd;
     
     public bool MoveNext()
     {
         var index = _original.IndexOf(SplitItem);
         if (index == -1)
         {
-            if (_reachedEnd)
+            if (_isReachedEnd)
                 return false;
 
             Current = _original;
-            _reachedEnd = true;
+            _isReachedEnd = true;
             return true;
         }
         
@@ -36,6 +36,6 @@ internal ref struct SpanSplitEnumerator<T> where T : IEquatable<T>
         _original  = item;
         Current    = _original;
         SplitItem  = splitItem;
-        _reachedEnd = false;
+        _isReachedEnd = false;
     }
 }
