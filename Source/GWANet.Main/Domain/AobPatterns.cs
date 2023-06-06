@@ -1,4 +1,4 @@
-using GWANet.Scanner.Definitions;
+using RapidMemory.Definitions;
 
 namespace GWANet.Main.Domain
 {

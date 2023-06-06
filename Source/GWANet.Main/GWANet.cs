@@ -6,8 +6,8 @@ using System.Text;
 using GWANet.Main.Domain;
 using GWANet.Main.Exceptions;
 using GWANet.Main.Settings;
-using GWANet.Scanner;
-using GWANet.Scanner.Definitions;
+using RapidMemory;
+using RapidMemory.Definitions;
 
 namespace GWANet.Main
 {
