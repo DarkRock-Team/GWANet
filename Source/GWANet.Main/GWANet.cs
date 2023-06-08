@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using GWANet.Main.Domain;
 using GWANet.Main.Exceptions;
+using GWANet.Main.Modules;
 using GWANet.Main.Settings;
 using RapidMemory;
 using RapidMemory.Definitions;
@@ -31,13 +32,13 @@ namespace GWANet.Main
             }
 
             var patternsToScan = new List<BytePattern>();
-
+            AddGameAobsToList(ref patternsToScan);
+            
             if (settings.InitializeChat)
             {
-                patternsToScan.AddRange(PrepareChatAobs());
+                ChatModule.AddChatAobsToList(ref patternsToScan);
             }
             
-            InitializeGamePointers(patternsToScan);
         }
 
         private void InitializeMemScanner(in Process gameProcess)
@@ -71,24 +72,12 @@ namespace GWANet.Main
             return charName;
         }
 
-        private static IEnumerable<BytePattern> PrepareChatAobs()
-         => new List<BytePattern>
-            {
-                AobPatterns.ChatEvent,
-                AobPatterns.GetSenderColor,
-                AobPatterns.GetMessageColor,
-                AobPatterns.LocalMessage,
-                AobPatterns.SendChat,
-                AobPatterns.StartWhisper,
-                AobPatterns.WriteWhisper,
-                AobPatterns.PrintChat,
-                AobPatterns.AddToChatLog,
-                AobPatterns.ChatBuffer,
-                AobPatterns.IsTyping
-            };
-
-        private void InitializeGamePointers(List<BytePattern> patternsToScan)
+        private static void AddGameAobsToList(ref List<BytePattern> patternsToScan)
         {
+            if (!patternsToScan.Any())
+            {
+                patternsToScan = new List<BytePattern>();
+            }
             patternsToScan.AddRange(new List<BytePattern>
             {
                 AobPatterns.ScanBasePtr,
@@ -98,10 +87,7 @@ namespace GWANet.Main
                 AobPatterns.PlayerAgentIdPtr,
                 AobPatterns.SendDialog,
                 AobPatterns.InteractAgent
-            }); 
-            var scanResults = _memScanner.FindPatterns(patternsToScan);
-
-            return;
+            });
         }
 
         public void Dispose()
