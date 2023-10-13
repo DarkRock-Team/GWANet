@@ -17,7 +17,7 @@ namespace GWANet.Main
         private const string ProcessName = "Gw";
         private IMemScanner _memScanner; 
 
-        public void Initialize(InitializationSettings settings = default)
+        public bool Initialize(InitializationSettings settings = default)
         {
             var gwProcess = Process.GetProcessesByName(ProcessName).FirstOrDefault();
             if (gwProcess is null)
@@ -38,17 +38,23 @@ namespace GWANet.Main
             {
                 ChatModule.AddChatAobsToList(ref patternsToScan);
             }
-            
+
+            return true; 
         }
 
         private void InitializeMemScanner(in Process gameProcess)
         {
             _memScanner ??= new MemScanner(gameProcess);
             GamePointers.MainModuleBaseAddress = (int)gameProcess.MainModule!.BaseAddress;
+
+            if(GamePointers.MainModuleBaseAddress <= 0)
+            {
+                throw new InvalidMemoryValueException(GamePointers.MainModuleBaseAddress);
+            }
         }
         private string ScanForCharacterName()
         {
-            const int maxCharacterNameLengthSize = 40; // 2* maximum character name length
+            const int maxCharacterNameLengthSize = 40; // 2* maximum character name length for unicode
             
             var charNameScanResult = _memScanner.FindPattern(AobPatterns.CharacterName);
 
@@ -58,11 +64,13 @@ namespace GWANet.Main
             }
 
             var charNameAddr = unchecked((UIntPtr) (GamePointers.MainModuleBaseAddress + charNameScanResult.Offset));
-
             _memScanner.Read(charNameAddr, out int charNamePtr);
-            GamePointers.CharacterName = (IntPtr)charNamePtr + 0x10;
+
+            GamePointers.CharacterName = charNamePtr;
             _memScanner.ReadBytes(GamePointers.CharacterName, out var charNameBytes, maxCharacterNameLengthSize);
-            var charName = Encoding.Unicode.GetString(charNameBytes, 0, charNameBytes.Length);
+
+            var nullCharacterIndex = GetUnicodeNullCharacterIndex(in charNameBytes);
+            var charName = Encoding.Unicode.GetString(charNameBytes, 0, nullCharacterIndex);
             
             if (string.IsNullOrEmpty(charName))
             {
@@ -70,6 +78,34 @@ namespace GWANet.Main
             }
                 
             return charName;
+        }
+
+        /// <summary>
+        /// Finds a NUL terminator represented as 0x00 in provided byte array
+        /// </summary>
+        /// <param name="unicodeArray">unicode byte array</param>
+        /// <returns>array index at which the null terminator is found</returns>
+        private static int GetUnicodeNullCharacterIndex(in byte[] unicodeArray)
+        {
+            const int minimumCharNameLength = 3;
+            var successiveNullTerminatorsCount = 0;
+            for (var i = minimumCharNameLength; i < unicodeArray.Length; i++)
+            {
+
+                if (unicodeArray[i] == 0x00)
+                {
+                    successiveNullTerminatorsCount++;
+                }
+                else
+                {
+                    successiveNullTerminatorsCount = 0;
+                }
+                if(successiveNullTerminatorsCount == 2)
+                {
+                    return i;
+                }     
+            }
+            return unicodeArray.Length;
         }
 
         private static void AddGameAobsToList(ref List<BytePattern> patternsToScan)

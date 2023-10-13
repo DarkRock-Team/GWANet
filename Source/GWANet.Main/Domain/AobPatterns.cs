@@ -8,8 +8,7 @@ namespace GWANet.Main.Domain
         public static readonly BytePattern ScanBasePtr = new("50 6A 0F 6A 00 FF 35", 0x7);
 
         public static readonly BytePattern GameVersion = new("6A 00 68 00 00 01 00 89", 0x42);
-        public static readonly BytePattern CharacterName = new("CC CC CC 55 8B EC 51 66", 0x102B);
-        
+        public static readonly BytePattern CharacterName = new("8B F8 6A 03 68 0F 00 00 C0 8B CF E8", -0x42);
         #region Agent
         // AgentArrayPtr
         public static readonly BytePattern ScanAgentBasePtr = new("FF 50 10 47 83 C6 04 3B FB 75 E1", 0xD);
