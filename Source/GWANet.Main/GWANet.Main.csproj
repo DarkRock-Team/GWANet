@@ -36,4 +36,8 @@
     <PackageReference Include="RapidMemory" Version="0.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GWANet.Native\GWANet.Native.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Main", "Source\GWANe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{9B81E1B8-3B0A-499B-8951-253FF2908FD3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.Main.SystemTests", "Tests\GWANet.Main.SystemTests\GWANet.Main.SystemTests.csproj", "{695FDE52-84C8-47DD-9B44-1985BC19DCAB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Main.SystemTests", "Tests\GWANet.Main.SystemTests\GWANet.Main.SystemTests.csproj", "{695FDE52-84C8-47DD-9B44-1985BC19DCAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.Main.UnitTests", "Tests\GWANet.Main.UnitTests\GWANet.Main.UnitTests.csproj", "{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GWANet.Main.UnitTests", "Tests\GWANet.Main.UnitTests\GWANet.Main.UnitTests.csproj", "{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GWANet.Native", "Source\GWANet.Native\GWANet.Native.csproj", "{3EBBF792-C1D8-46D3-BAAD-6809846AC199}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,15 +45,23 @@ Global
 		{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE}.Release|x64.ActiveCfg = Release|Any CPU
 		{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE}.Release|x64.Build.0 = Release|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Debug|x64.Build.0 = Debug|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Release|x64.ActiveCfg = Release|Any CPU
+		{3EBBF792-C1D8-46D3-BAAD-6809846AC199}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {EE83F427-3D8F-4E30-9A38-BDE0A89B375D}
-	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{695FDE52-84C8-47DD-9B44-1985BC19DCAB} = {9B81E1B8-3B0A-499B-8951-253FF2908FD3}
 		{1ACB0E4F-2387-4DD0-A1FF-7A7F849E0AAE} = {9B81E1B8-3B0A-499B-8951-253FF2908FD3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EE83F427-3D8F-4E30-9A38-BDE0A89B375D}
 	EndGlobalSection
 EndGlobal

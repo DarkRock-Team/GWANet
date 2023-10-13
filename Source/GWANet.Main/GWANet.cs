@@ -7,6 +7,7 @@ using GWANet.Main.Domain;
 using GWANet.Main.Exceptions;
 using GWANet.Main.Modules;
 using GWANet.Main.Settings;
+using GWANet.Native;
 using RapidMemory;
 using RapidMemory.Definitions;
 
@@ -29,6 +30,7 @@ namespace GWANet.Main
             if (settings!.ChangeGameTitle && !string.IsNullOrEmpty(settings.CharacterName))
             {
                 var characterName = ScanForCharacterName();
+                NativeImports.SetWindowText(gwProcess.MainWindowHandle, $"Guild Wars - {characterName}");
             }
 
             var patternsToScan = new List<BytePattern>();
