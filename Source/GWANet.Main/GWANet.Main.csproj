@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Platforms>AnyCPU;x64</Platforms>
     <LangVersion>10</LangVersion>
     <PackageIcon>gwanet.ico</PackageIcon>
@@ -23,13 +23,8 @@
     </AssemblyAttribute>
     <None Include="..\..\Resources\gwanet.ico">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
       <Link>gwanet.ico</Link>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\GWANet.Scanner\GWANet.Scanner.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Chat" />
+    <PackageReference Include="RapidMemory" Version="0.1.0" />
   </ItemGroup>
 
 </Project>

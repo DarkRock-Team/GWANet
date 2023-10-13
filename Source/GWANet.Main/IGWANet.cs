@@ -5,6 +5,6 @@ namespace GWANet.Main
 {
     public interface IGWANet : IDisposable
     {
-        public void Initialize(InitializationSettings settings = null);
+        public bool Initialize(InitializationSettings settings = null);
     }
 }

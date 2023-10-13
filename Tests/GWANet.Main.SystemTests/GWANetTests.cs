@@ -15,8 +15,8 @@ public sealed class GWANetTests : GWANetTestBase
         };
         var gwa = new GWANet();
         
-        gwa.Initialize(gwaSettings);
+        var isInitialized = gwa.Initialize(gwaSettings);
         
-        Assert.True(true);
+        Assert.True(isInitialized);
     }
 }
